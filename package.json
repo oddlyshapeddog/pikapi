@@ -1,0 +1,11 @@
+{
+  "name": "pikapi",
+  "version": "1.0.0",
+  "description": "Pluggable API framework for Nightbot APIs",
+  "main": "api.js",
+  "scripts": {
+  	"start": "node api.js"
+  },
+  "author": "NotDaisuke",
+  "license": "MIT"
+}
