@@ -61,12 +61,12 @@ function getRandomLineFromString(str) {
 		return null;
 	}
 
-	var parts = str.split("\n");
+	var parts = str.split(/[\n\r]+/g);
 	var line = '';
 	do {
 		var idx = Math.floor(Math.random() * parts.length);
-		line = parts[idx];
-	} while(!line.trim());
+		line = parts[idx].trim();
+	} while(!line);
 
 	return line;
 }
