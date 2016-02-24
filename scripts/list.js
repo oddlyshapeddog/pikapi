@@ -6,7 +6,7 @@ var winston = require('winston');
 var urlWithUrlRegex = /^(.+)(https?:\/\/.*)$/gi;
 
 
-function getLine(remoteURL, lineNumber, onSuccess, onFailure) {
+function getList(remoteURL, onSuccess, onFailure) {
 
     var urlParts = url.parse(remoteURL, true);
     var requestOptions = {
@@ -36,19 +36,14 @@ function getLine(remoteURL, lineNumber, onSuccess, onFailure) {
                     return;
                 }
 
-                var line = getLineFromString(data, lineNumber);
-                if(line) {
-                    winston.info("Line found: " + line);
-                    onSuccess(line);
+                var list = listify(data);
+                if(list) {
+                    winston.info("List created successfully!");
+                    onSuccess(list);
                 }
                 else {
-                    winston.warn("Line not found!");
-                    if(lineNumber !== null) {
-                        onFailure("Line " + lineNumber + " is empty or nonexistent!");
-                    }
-                    else {
-                        onFailure("Could not find a non-empty line!");
-                    }
+                    winston.warn("List could not be created!");
+                    onFailure("Could not create list!");
                 }
             });
         }
@@ -77,29 +72,17 @@ function handleRemoteResponse(response, cb) {
     });
 }
 
-function getLineFromString(str, lineNumber) {
+function listify(str) {
     // reject empty strings
     if(!str.trim()) {
         return null;
     }
 
-    var parts = str.split(/[\n\r]+/g);
-    var line;
-    if(lineNumber !== null) {
-        if(lineNumber >= 1 && parts[lineNumber - 1]) {
-            line = parts[lineNumber - 1];
-        }
-        else {
-            line = null;
-        }
-    }
-    else {
-        do {
-            var idx = Math.floor(Math.random() * parts.length);
-            line = parts[idx];
-        } while(!line.trim());
-    }
-    return line;
+    var lineNumber = 1;
+    var parts = str.split(/[\n\r]+/g).map(function(str) {
+        return lineNumber++ + ' : ' + str;
+    });
+    return parts.join("\n");
 }
 
 function handleRequest(request, response, cb) {
@@ -115,22 +98,10 @@ function handleRequest(request, response, cb) {
 
     var parts = url.parse(requestURL, true);
     if(parts.query && parts.query.url) {
-        // if line number not specified, default to null,
-        // which will result in a random line being selected
-        var lineNumber = parts.query.line;
-        if(!lineNumber || isNaN(lineNumber)) {
-            lineNumber = null;
-        }
-        else {
-            // lineNumber guaranteed to be numeric
-            lineNumber = parseInt(lineNumber);
-        }
-
-        getLine(
+        getList(
             parts.query.url,
-            lineNumber,
-            function(line) {
-                response.write(line);
+            function(list) {
+                response.write(list);
                 cb();
             },
             function(err) {
@@ -146,6 +117,6 @@ function handleRequest(request, response, cb) {
 
 
 module.exports = {
-    endpoint: '/pick-random-line',
+    endpoint: '/list',
     requestHandler: handleRequest
 };

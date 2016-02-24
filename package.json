@@ -4,8 +4,11 @@
   "description": "Pluggable API framework for Nightbot APIs",
   "main": "api.js",
   "scripts": {
-  	"start": "node api.js"
+    "start": "forever -a start api.js",
+    "stop": "forever stop api.js"
   },
   "author": "NotDaisuke",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+  }
 }

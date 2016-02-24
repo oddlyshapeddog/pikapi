@@ -2,6 +2,7 @@ var fs = require('fs');
 var url = require('url');
 var http = require('http');
 var path = require('path');
+var winston = require('winston');
 
 
 var server = null;
@@ -47,5 +48,6 @@ function startServer() {
 }
 
 
+winston.setLevels();
 loadScripts();
 startServer();
