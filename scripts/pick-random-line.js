@@ -6,7 +6,7 @@ var winston = require('winston');
 var urlWithUrlRegex = /^(.+)(https?:\/\/.*)$/gi;
 
 
-function getLine(remoteURL, lineNumber, onSuccess, onFailure) {
+function getLine(remoteURL, query, onSuccess, onFailure) {
 
     var urlParts = url.parse(remoteURL, true);
     var requestOptions = {
@@ -36,19 +36,19 @@ function getLine(remoteURL, lineNumber, onSuccess, onFailure) {
                     return;
                 }
 
-                var line = getLineFromString(data, lineNumber);
+                var line = getLineFromString(data, query);
                 if(line) {
                     winston.info("Line found: " + line);
                     onSuccess(line);
                 }
+                else if(query == null) {
+                    onFailure("Could not find a non-empty line!");
+                }
+                else if(typeof query == 'string') {
+                    onFailure("Could not find a line containing '" + query + "'!");
+                }
                 else {
-                    winston.warn("Line not found!");
-                    if(lineNumber !== null) {
-                        onFailure("Line " + lineNumber + " is empty or nonexistent!");
-                    }
-                    else {
-                        onFailure("Could not find a non-empty line!");
-                    }
+                    onFailure("Line " + query + " is empty or nonexistent!");
                 }
             });
         }
@@ -77,14 +77,26 @@ function handleRemoteResponse(response, cb) {
     });
 }
 
-function getLineFromString(str, lineNumber) {
+function getLineFromString(str, query) {
     // reject empty strings
     if(!str.trim()) {
         return null;
     }
 
+    winston.info("Query: " + query + " (" + typeof query + ")");
+
+    if(typeof query == 'string') {
+        return searchLineInString(str, query);
+    }
+    else {
+        return getNumberedLineFromString(str, query);
+    }
+}
+
+function getNumberedLineFromString(str, lineNumber) {
     var parts = str.split(/[\n\r]+/g);
     var line;
+
     if(lineNumber !== null) {
         if(lineNumber >= 1 && parts[lineNumber - 1]) {
             line = parts[lineNumber - 1];
@@ -102,6 +114,23 @@ function getLineFromString(str, lineNumber) {
     return line;
 }
 
+function searchLineInString(str, query) {
+    var parts = str.split(/[\n\r]+/g);
+    var matchingLines = [];
+
+    for(var i=0; i<parts.length; i++) {
+        var line = parts[i];
+        if(line.toLowerCase().indexOf(query) >= 0) {
+            matchingLines.push(line);
+        }
+    }
+
+    winston.info("Matching lines: " + matchingLines.join(' | '));
+
+    var idx = Math.floor(Math.random() * matchingLines.length);
+    return matchingLines[idx];
+}
+
 function handleRequest(request, response, cb) {
     var requestURL = request.url;
 
@@ -117,18 +146,21 @@ function handleRequest(request, response, cb) {
     if(parts.query && parts.query.url) {
         // if line number not specified, default to null,
         // which will result in a random line being selected
-        var lineNumber = parts.query.line;
-        if(!lineNumber || isNaN(lineNumber)) {
-            lineNumber = null;
+        var query = parts.query.line;
+        if(!query) {
+            query = null;
+        }
+        else if(!isNaN(query)) {
+            // query guaranteed to be numeric
+            query = parseInt(query);
         }
         else {
-            // lineNumber guaranteed to be numeric
-            lineNumber = parseInt(lineNumber);
+            query = query.toLowerCase();
         }
 
         getLine(
             parts.query.url,
-            lineNumber,
+            query,
             function(line) {
                 response.write(line);
                 cb();
