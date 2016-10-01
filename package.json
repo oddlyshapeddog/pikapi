@@ -1,14 +1,20 @@
 {
   "name": "pikapi",
-  "version": "1.0.0",
-  "description": "Pluggable API framework for Nightbot APIs",
+  "version": "2.0.0",
+  "description": "Pluggable API framework for Twitch APIs",
   "main": "api.js",
   "scripts": {
-    "start": "forever -a start api.js",
-    "stop": "forever stop api.js"
+    "start": "node api.js",
+    "stop": "node api.js"
   },
   "author": "NotDaisuke",
   "license": "MIT",
   "dependencies": {
+    "hapi": "^14.1.0",
+    "mocha": "^3.0.1",
+    "passport": "^0.3.2",
+    "sqlite3": "^3.1.4",
+    "supertest": "^2.0.0",
+    "winston": "^2.2.0"
   }
 }
