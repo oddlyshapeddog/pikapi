@@ -3,6 +3,7 @@ var url = require('url');
 var http = require('http');
 var path = require('path');
 var winston = require('winston');
+require('dotenv').config({silent: true});
 
 
 var server = null;
@@ -44,7 +45,9 @@ function handleRequest(request, response) {
 }
 
 function startServer() {
-	http.createServer(handleRequest).listen(6749);
+	var port = process.env.port || 6749;
+	http.createServer(handleRequest).listen(port);
+	console.log("Running on port " + port)
 }
 
 

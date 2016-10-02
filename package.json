@@ -4,11 +4,16 @@
   "description": "Pluggable API framework for Nightbot APIs",
   "main": "api.js",
   "scripts": {
-    "start": "forever -a start api.js",
-    "stop": "forever stop api.js"
+    "start": "node api.js"
   },
   "author": "NotDaisuke",
   "license": "MIT",
   "dependencies": {
+    "cson": "^3.0.2",
+    "dotenv": "^2.0.0",
+    "filesize": "^3.3.0",
+    "js-yaml": "^3.6.1",
+    "tracery-grammar": "^2.7.2",
+    "winston": "^2.2.0"
   }
 }

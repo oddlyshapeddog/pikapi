@@ -1,9 +1,12 @@
 var url = require('url');
 var http = require('http');
 var winston = require('winston');
+var filesize = require('filesize');
 
 
 var urlWithUrlRegex = /^(.+)(https?:\/\/.*)$/gi;
+var MAX_RESPONSE_SIZE = process.env.MAX_REMOTE_FILE_SIZE || 10 * 1024; // 10kb
+var MAX_RESPONSE_SIZE_HUMAN_READABLE = filesize(MAX_RESPONSE_SIZE); 
 
 
 function getLine(remoteURL, query, onSuccess, onFailure) {
@@ -62,9 +65,29 @@ function getLine(remoteURL, query, onSuccess, onFailure) {
 }
 
 function handleRemoteResponse(response, cb) {
+    // reject overly large responses
+    var contentLength = response.headersSent && response.getHeader('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_RESPONSE_SIZE) {
+        winston.warn("Response too large! Content length: " + contentLength);
+        cb("The remote file must be smaller than " + MAX_RESPONSE_SIZE_HUMAN_READABLE);
+        return;
+    }
+
+    var bytesLoaded = 0;
     var str = '';
 
     response.on('data', function(data) {
+        bytesLoaded += data.length;
+
+        // check payload against limit
+        if (bytesLoaded > MAX_RESPONSE_SIZE) {
+            response.end();
+            winston.warn("Response too large! Total bytes loaded: " + bytesLoaded);
+            cb("The remote file must be smaller than " + MAX_RESPONSE_SIZE_HUMAN_READABLE);
+            str = null;
+            return;
+        }
+
         str += data;
     });
 
