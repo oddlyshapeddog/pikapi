@@ -116,6 +116,7 @@ function parseData(data, format) {
         parsedData = JSON.parse(data);
     }
     else if (format == 'cson') {
+        data = normalizeCSON(data);
         parsedData = CSON.parse(data);
     }
     else if (format == 'yaml') {
@@ -130,6 +131,17 @@ function parseData(data, format) {
     }
     winston.info(parsedData);
     return parsedData;
+}
+
+function normalizeCSON(csonData) {
+    var lines = csonData.split("\n");
+
+    // normalize indentation
+    lines = lines.map(function(line) {
+        return line.replace(/^\s/, '  ');
+    });
+
+    return lines.join("\n");
 }
 
 function generateResult(grammarObject, listName) {
