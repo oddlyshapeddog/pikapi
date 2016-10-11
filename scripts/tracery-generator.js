@@ -74,7 +74,7 @@ function handleRemoteResponse(response, format, cb) {
 
         // check payload against limit
         if (bytesLoaded > MAX_RESPONSE_SIZE) {
-            response.end();
+            response.pause();
             winston.warn("Response too large! Total bytes loaded: " + bytesLoaded);
             cb("The remote file must be smaller than " + MAX_RESPONSE_SIZE_HUMAN_READABLE);
             remoteContent = null;
