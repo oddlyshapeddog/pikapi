@@ -75,7 +75,7 @@ function loadScripts() {
 
 function startServer() {
   winston.info('Starting server...')
-  const port = process.env.port || 6749
+  const port = process.env.PORT || 6749
   app.listen(port)
   winston.log(`Running on port ${port}`)
 }
