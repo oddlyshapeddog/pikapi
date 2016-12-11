@@ -129,11 +129,15 @@ Loads a [Tracery](https://github.com/galaxykate/tracery) grammar from a remote J
 Pikapi supports [dotenv](https://github.com/motdotla/dotenv) for environment variables.
 
   * `PORT` - the HTTP port (default: `6749`)
+  * `LOG_LEVEL` - the [log level](https://github.com/winstonjs/winston#logging-levels) (default: `debug`)
   * `MAX_REMOTE_FILE_SIZE` - file size limit for remote files in bytes (defaults vary)
+  * `DEFAULT_REMOTE_FILE_FORMAT` - default format for remote files (default: `json`)
 
 ## TODO
 
   * OAuth
   * Profiling
   * Cache results
-  * Abstract away common stuff (remote file loading, file size checking, URL parsing)
+  * Get rid of my custom routing and use koa's
+  * ~~Abstract away common stuff (remote file loading, file size checking, URL parsing)~~
+  * Unit/Integration tests
