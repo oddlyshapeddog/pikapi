@@ -45,11 +45,11 @@ function setupServer() {
       winston.debug(params)
       scripts[endpoint](params)
         .then((result) => {
-          this.body += result
+          this.body = result
         },
         (err) => {
           winston.warn(`Request failed! Error: ${err}`)
-          this.body += `Error: ${err}`
+          this.body = `Error: ${err}`
         })
     }
     else {
