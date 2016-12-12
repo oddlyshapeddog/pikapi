@@ -21,29 +21,34 @@ function setupServer() {
 
   app.use(function *(next) {
     let querystring = this.request.querystring
+    winston.debug(`Processing query string ${querystring}...`)
     const matches = urlWithUrlRegex.exec(querystring)
     if(matches && matches[1] && matches[2]) {
       const encodedURL = encodeURIComponent(matches[2])
       querystring = querystring.replace(urlWithUrlRegex, '$1' + encodedURL)
       winston.debug(`Query string encoded to ${querystring}`)
     }
-    this.set('PostProcessedQuery', querystring)
+    //this.set('PostProcessedQuery', querystring) // TODO find out why this isn't working'
+    this.request.postProcessedQuery = querystring
     yield next
   })
 
   app.use(function *(next) {
     const endpoint = this.request.path
     if (endpoint && scripts[endpoint]) {
-      winston.log(`GET ${endpoint}`)
-      const params = querystring.parse(this.get('PostProcessedQuery'))
+      winston.info(`GET ${endpoint}`)
+      //const params = querystring.parse(this.get('PostProcessedQuery'))
+      const params = querystring.parse(this.request.postProcessedQuery)
 
+      //winston.debug(this.get('PostProcessedQuery'))
+      winston.debug(this.request.postProcessedQuery)
       winston.debug(params)
       scripts[endpoint](params)
         .then((result) => {
           this.body += result
         },
         (err) => {
-          winston.log(`Request failed! Error: ${err}`)
+          winston.warn(`Request failed! Error: ${err}`)
           this.body += `Error: ${err}`
         })
     }
@@ -63,7 +68,7 @@ function loadScripts() {
       const scriptPath = path.join('scripts/', files[i])
       winston.debug(`Found script ${files[i]} at ${scriptPath}`)
       const script = require(scriptPath)
-      winston.log(`Mapping ${files[i]} to ${script.endpoint}`)
+      winston.info(`Mapping ${files[i]} to ${script.endpoint}`)
       scripts[script.endpoint] = script.requestHandler
     }
     else {
