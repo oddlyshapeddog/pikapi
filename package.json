@@ -1,6 +1,6 @@
 {
   "name": "pikapi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Pluggable API framework for Nightbot APIs",
   "main": "api.js",
   "scripts": {
