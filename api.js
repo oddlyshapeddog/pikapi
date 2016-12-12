@@ -33,7 +33,7 @@ function setupServer() {
     yield next
   })
 
-  app.use(function *(next) {
+  app.use(function * (next) {
     const endpoint = this.request.path
     if (endpoint && scripts[endpoint]) {
       winston.info(`GET ${endpoint}`)
@@ -43,17 +43,16 @@ function setupServer() {
       //winston.debug(this.get('PostProcessedQuery'))
       winston.debug(this.request.postProcessedQuery)
       winston.debug(params)
-      scripts[endpoint](params)
-        .then((result) => {
-          this.body = result
-        },
-        (err) => {
-          winston.warn(`Request failed! Error: ${err}`)
-          this.body = `Error: ${err}`
-        })
+      try {
+        this.body = yield scripts[endpoint](params)
+      }
+      catch (err) {
+        winston.warn(`Request failed! Error: ${err}`)
+        this.body = `Error: ${err}`
+      }
     }
     else {
-      this.body = `Endpoint not recognized!`
+      this.body = `Invalid path: ${endpoint}`
     }
     yield next
   })
