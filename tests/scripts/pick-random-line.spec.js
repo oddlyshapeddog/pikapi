@@ -5,6 +5,7 @@ const mockery = require('mockery')
 const path = require('path')
 const appRootPath = require('app-root-path').path
 require('app-module-path').addPath(appRootPath + '/lib')
+const ERRORS = require('constants/errors')
 
 // mocks
 const winstonMock = require('../mocks/winston-mock')
@@ -12,6 +13,7 @@ const remoteDocumentLoaderMock = require('../mocks/remote-document-loader-mock')
 
 // non-mocks
 const allowedDependencies = [
+  'constants/errors',
   'scripts/pick-random-line'
 ]
 
@@ -28,10 +30,6 @@ beforeEach(() => {
 
 describe('pick-random-line', () => {
 
-  beforeEach(() => {
-    remoteDocumentLoaderMock.setMockResponse(DUMMY_LINE)
-  })
-
   it('should return a promise', () => {
     const requestHandler = require('scripts/pick-random-line')
       .requestHandler()
@@ -40,13 +38,30 @@ describe('pick-random-line', () => {
     expect(requestHandler.then).to.be.a('function')
   })
 
-  it('should pick the only line when available', (done) => {
+  it('should throw an error if the document is empty', (done) => {
+    remoteDocumentLoaderMock.setMockResponse('')
     require('scripts/pick-random-line').requestHandler({
       line: null,
       url: DUMMY_URL
     }).then(
       (result) => {
-        expect(result.to.be(DUMMY_LINE))
+        done(new Error())
+      },
+      (err) => {
+        expect(err.toString()).to.contain(ERRORS.EMPTY_DOCUMENT)
+        done()
+      }
+    )
+  })
+
+  it('should pick the only line when available', (done) => {
+    remoteDocumentLoaderMock.setMockResponse(DUMMY_LINE)
+    require('scripts/pick-random-line').requestHandler({
+      line: null,
+      url: DUMMY_URL
+    }).then(
+      (result) => {
+        expect(result).to.equal(DUMMY_LINE)
         done()
       },
       (err) => {
