@@ -1,12 +1,11 @@
 language: node_js
 node_js:
-- '4'
 - '6'
 - '8'
 script: npm run lint && npm run test
 deploy:
   provider: lambda
-  function_name: lambda-test
+  function_name: oddly-shaped-dog
   region: us-east-1
   role: arn:aws:iam::766510574476:role/oddly_shaped_dog_execution
   runtime: nodejs4.3
