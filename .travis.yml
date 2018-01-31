@@ -7,7 +7,7 @@ deploy:
   provider: lambda
   function_name: oddly-shaped-dog
   region: us-east-1
-  role: arn:aws:iam::766510574476:role/oddly_shaped_dog_execution
+  role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
   runtime: nodejs4.3
   handler_name: handler
   access_key_id: AKIAI6DDUJBUN46S6JKA
