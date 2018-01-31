@@ -1,6 +1,6 @@
 {
   "name": "pikapi",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Pluggable API framework for Nightbot APIs",
   "main": "api.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "test:debug": "mocha debug tests/**/*.spec.js",
     "start": "npm run lint && node api.js"
   },
-  "author": "NotDaisuke",
+  "author": "Julio Sepia",
   "license": "MIT",
   "dependencies": {
     "app-module-path": "^2.1.0",
