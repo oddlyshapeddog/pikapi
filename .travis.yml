@@ -5,7 +5,7 @@ node_js:
 script: npm run lint && npm run test
 deploy:
 - provider: lambda
-  function_name: ods-amazon-url-builder
+  function_name: ods-build-amazon-url
   region: us-east-1
   role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
   runtime: nodejs4.3
