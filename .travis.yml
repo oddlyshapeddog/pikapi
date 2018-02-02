@@ -8,7 +8,7 @@ deploy:
   function_name: ods-build-amazon-url
   region: us-east-1
   role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   handler_name: build-amazon-url
   access_key_id: AKIAI6DDUJBUN46S6JKA
   secret_access_key:
@@ -17,7 +17,7 @@ deploy:
   function_name: ods-list
   region: us-east-1
   role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   handler_name: list
   access_key_id: AKIAI6DDUJBUN46S6JKA
   secret_access_key:
@@ -26,7 +26,7 @@ deploy:
   function_name: ods-pick-random-line
   region: us-east-1
   role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   handler_name: pick-random-line
   access_key_id: AKIAI6DDUJBUN46S6JKA
   secret_access_key:
@@ -35,7 +35,7 @@ deploy:
   function_name: ods-tracery
   region: us-east-1
   role: arn:aws:iam::766510574476:role/OddlyShapedDogTravisUploader
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   handler_name: tracery
   access_key_id: AKIAI6DDUJBUN46S6JKA
   secret_access_key:
