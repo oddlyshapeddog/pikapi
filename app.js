@@ -31,28 +31,33 @@ function postProcessEvent(event) {
 }
 
 function handleEvent(route, event, handler, callback) {
+  function sendSuccessResponse(body) {
+    callback(
+      null,
+      buildResponse(
+        200,
+        body
+      )
+    )
+  }
+
+  function sendErrorResponse(error) {
+    callback(
+      null,
+      buildResponse(
+        500,
+        error || `Unknown error occurred while handling request ${JSON.parse(event)}`
+      )
+    )
+  }
+
   winston.info(`GET /${route} ${JSON.stringify(event)}`)
   event = postProcessEvent(event)
-  handler(event).then(
-    (response) => {
-      callback(
-        null,
-        buildResponse(
-          200,
-          response
-        )
-      )
-    },
-    (err) => {
-      callback(
-        null,
-        buildResponse(
-          500,
-          err
-        )
-      )
-    }
-  )
+  try {
+    handler(event).then(sendSuccessResponse, sendErrorResponse)
+  } catch(e) {
+    sendErrorResponse(e)
+  }
 }
 
 function buildResponse(statusCode, body) {
