@@ -1,79 +1,69 @@
-const Hapi = require('hapi')
-const Good = require('good')
+const winston = require('winston')
 
-const port = process.env.PORT || 3000
-const SCRIPTS_PATH = './lib/scripts'
-const SCRIPT_REGEX = /\.js$/gi
+const scripts = {}
 
-const server = null
-const scripts = null
-
-function loadScripts() {
-  const files = fs.readdirSync(SCRIPTS_PATH)
-  files.forEach((file) => {
-    if (file.match(SCRIPT_REGEX)) {
-      const scriptPath = path.join('scripts/', file)
-      const script = require(scriptPath)
-      scripts.push(script)
-    }
-  })
+function registerScript(endpoint, requestHandler) {
+  winston.info(`Setting up ${endpoint} request handler`)
+  scripts[endpoint] = (event, context, callback) => {
+    handleEvent(endpoint, event, requestHandler, callback)
+  }
 }
 
-function startServer() {
-  server = new Hapi.Server()
-
-  server.connection({
-    port: port,
-    host: '0.0.0.0'
-  })
-
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-      reply({
-        status: 'SUCCESS',
-        apis: apis
-      })
-    }
-  })
-
-  server.route({
-    method: 'GET',
-    path: '/{name}',
-    handler: function (request, reply) {
-      reply('Hello, ' + encodeURIComponent(request.params.name) + '!')
-    }
-  })
-
-  server.register({
-    register: Good,
-    options: {
-      reporters: {
-        console: [{
-          module: 'good-squeeze',
-          name: 'Squeeze',
-          args: [{
-            response: '*',
-            log: '*'
-          }]
-        }, {
-          module: 'good-console'
-        }, 'stdout']
+function postProcessEvent(event) {
+  const newEvent = {}
+  if ('url' in event) {
+    const keys = Object.keys(event)
+    let urlIndex
+    for (urlIndex = 0; urlIndex < keys.length; urlIndex++) {
+      const key = keys[urlIndex]
+      newEvent[key] = event[key]
+      if (key === 'url') {
+        break
       }
     }
-  }, (err) => {
-
-    if (err) {
-      throw err
+    for (let i = urlIndex + 1; i < keys.length; i++) {
+      const value = event[keys[i]]
+      newEvent.url += `&${key}=${value}`
     }
+    winston.debug(`URL found: ${newEvent.url}`)
+  }
+  return newEvent
+}
 
-    server.start((err) => {
+function handleEvent(route, event, handler, callback) {
+  winston.info(`GET /${route} ${JSON.stringify(event)}`)
+  event = postProcessEvent(event)
+  handler(event).then(
+    (response) => {
+      callback(
+        null,
+        buildResponse(
+          200,
+          response
+        )
+      )
+    },
+    (err) => {
+      callback(
+        null,
+        buildResponse(
+          500,
+          err
+        )
+      )
+    }
+  )
+}
 
-      if (err) {
-        throw err
-      }
-      server.log('info', `Pikapi running at ${server.info.uri}`)
-    })
-  })
+function buildResponse(statusCode, body) {
+  return {
+    statusCode: statusCode,
+    headers: { 'Content-Type': 'text/plain' },
+    body: body
+  }
+}
+
+module.exports = {
+  registerScript: registerScript,
+  scripts: scripts
 }
