@@ -14,25 +14,6 @@ function postProcessEvent(event) {
     event = event.queryStringParameters
   }
 
-  if ('url' in event) {
-    const newEvent = {}
-    const keys = Object.keys(event)
-    let urlIndex
-    for (urlIndex = 0; urlIndex < keys.length; urlIndex++) {
-      const key = keys[urlIndex]
-      newEvent[key] = event[key]
-      if (key === 'url') {
-        break
-      }
-    }
-    for (let i = urlIndex + 1; i < keys.length; i++) {
-      const value = event[keys[i]]
-      newEvent.url += `&${keys[i]}=${value}`
-    }
-    winston.debug(`URL found: ${newEvent.url}`)
-    event = newEvent
-  }
-
   return event
 }
 
