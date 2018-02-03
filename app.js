@@ -10,8 +10,12 @@ function registerScript(endpoint, requestHandler) {
 }
 
 function postProcessEvent(event) {
-  const newEvent = {}
+  if ('queryStringParameters' in event) {
+    event = event.queryStringParameters
+  }
+
   if ('url' in event) {
+    const newEvent = {}
     const keys = Object.keys(event)
     let urlIndex
     for (urlIndex = 0; urlIndex < keys.length; urlIndex++) {
@@ -23,11 +27,13 @@ function postProcessEvent(event) {
     }
     for (let i = urlIndex + 1; i < keys.length; i++) {
       const value = event[keys[i]]
-      newEvent.url += `&${key}=${value}`
+      newEvent.url += `&${keys[i]}=${value}`
     }
     winston.debug(`URL found: ${newEvent.url}`)
+    event = newEvent
   }
-  return newEvent
+
+  return event
 }
 
 function handleEvent(route, event, handler, callback) {
@@ -46,7 +52,7 @@ function handleEvent(route, event, handler, callback) {
       null,
       buildResponse(
         500,
-        error || `Unknown error occurred while handling request ${JSON.parse(event)}`
+        JSON.stringify(error) || `Unknown error occurred while handling request ${JSON.parse(event)}`
       )
     )
   }
