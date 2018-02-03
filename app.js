@@ -42,7 +42,7 @@ function handleEvent(route, event, handler, callback) {
       null,
       buildResponse(
         200,
-        body
+        body.toString()
       )
     )
   }
@@ -51,8 +51,8 @@ function handleEvent(route, event, handler, callback) {
     callback(
       null,
       buildResponse(
-        500,
-        JSON.stringify(error) || `Unknown error occurred while handling request ${JSON.parse(event)}`
+        200,
+        `Error: ${error.toString()}` || `Unknown error occurred while handling request ${JSON.parse(event)}`
       )
     )
   }
@@ -60,7 +60,11 @@ function handleEvent(route, event, handler, callback) {
   winston.info(`GET /${route} ${JSON.stringify(event)}`)
   event = postProcessEvent(event)
   try {
-    handler(event).then(sendSuccessResponse, sendErrorResponse)
+    handler(event)
+      .then(
+        sendSuccessResponse,
+        sendErrorResponse
+      )
   } catch(e) {
     sendErrorResponse(e)
   }
