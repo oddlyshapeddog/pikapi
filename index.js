@@ -1,5 +1,4 @@
 const fs = require('fs')
-const path = require('path')
 const winston = require('winston')
 const app = require('./app')
 
@@ -9,7 +8,7 @@ const SCRIPT_REGEX = /\.js$/gi
 winston.level = process.env.LOG_LEVEL || 'info'
 
 function loadScripts() {
-  winston.info(`Looking for scripts in '${SCRIPTS_PATH}'...`)
+  winston.debug(`Looking for scripts in '${SCRIPTS_PATH}'...`)
   const files = fs.readdirSync(SCRIPTS_PATH)
 
   winston.debug(`${files.length} files found`)

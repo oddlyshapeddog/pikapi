@@ -3,15 +3,21 @@ const winston = require('winston')
 const scripts = {}
 
 function registerScript(endpoint, requestHandler) {
-  winston.info(`Setting up ${endpoint} request handler`)
+  winston.debug(`Setting up ${endpoint} request handler`)
   scripts[endpoint] = (event, context, callback) => {
     handleEvent(endpoint, event, requestHandler, callback)
   }
 }
 
-function postProcessEvent(event) {
-  if ('queryStringParameters' in event) {
-    event = event.queryStringParameters
+function validateEvent(event) {
+  if (!event) {
+    throw new Error(`No event specified`)
+  }
+
+  if (!event.queryStringParameters) {
+    event = {
+      queryStringParameters: event
+    }
   }
 
   return event
@@ -19,29 +25,33 @@ function postProcessEvent(event) {
 
 function handleEvent(route, event, handler, callback) {
   function sendSuccessResponse(body) {
+    const bodyString = body.toString()
+    winston.info(`[RESPONSE] ${bodyString}`)
     callback(
       null,
       buildResponse(
         200,
-        body.toString()
+        bodyString
       )
     )
   }
 
   function sendErrorResponse(error) {
+    const errorString = error.toString()
+    winston.error(errorString)
     callback(
       null,
       buildResponse(
         200,
-        `Error: ${error.toString()}` || `Unknown error occurred while handling request ${JSON.parse(event)}`
+        `Error: ${errorString}` || `Unknown error occurred while handling request ${JSON.parse(event)}`
       )
     )
   }
 
   winston.info(`GET /${route} ${JSON.stringify(event)}`)
-  event = postProcessEvent(event)
   try {
-    handler(event)
+    validateEvent(event)
+    handler(event.queryStringParameters)
       .then(
         sendSuccessResponse,
         sendErrorResponse
