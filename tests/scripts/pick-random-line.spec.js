@@ -14,7 +14,7 @@ const commonAllowedDependencies = require('../test-utils/common-allowed-dependen
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
   'scripts/pick-random-line',
-  'util/remote-document-loader'
+  '../util/remote-document-loader'
 ])
 
 // test data

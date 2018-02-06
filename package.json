@@ -4,10 +4,9 @@
   "description": "Pluggable API framework for Nightbot APIs",
   "main": "api.js",
   "scripts": {
-    "lint": "eslint api.js \"lib/**/*.js\"",
+    "lint": "eslint *.js \"lib/**/*.js\"",
     "test": "mocha tests/**/*.spec.js",
-    "test:debug": "mocha debug tests/**/*.spec.js",
-    "start": "npm run lint && node index.js"
+    "start": "LOG_LEVEL=debug npm run lint && node ./index.js"
   },
   "author": "Julio Sepia",
   "license": "MIT",
