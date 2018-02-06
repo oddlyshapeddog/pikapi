@@ -6,6 +6,8 @@ const app = require('./app')
 const SCRIPTS_PATH = './lib/scripts'
 const SCRIPT_REGEX = /\.js$/gi
 
+winston.level = process.env.LOG_LEVEL || 'info'
+
 function loadScripts() {
   winston.info(`Looking for scripts in '${SCRIPTS_PATH}'...`)
   const files = fs.readdirSync(SCRIPTS_PATH)
