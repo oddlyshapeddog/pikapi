@@ -12,7 +12,19 @@ const wikiMock = require('../mocks/wikiquotesjs-mock')
 const commonAllowedDependencies = require('../test-utils/common-allowed-dependencies')
 
 // test data
-const DUMMY_QUOTE = 'I understand now that boundaries between noise and sound are conventions. All boundaries are conventions, waiting to be transcended. One may transcend any convention if only one can first conceive of doing so.'
+const DUMMY_QUOTE_TEXT = 'I understand now that boundaries between noise and sound are conventions. All boundaries are conventions, waiting to be transcended. One may transcend any convention if only one can first conceive of doing so.'
+const DUMMY_QUOTE_AUTHOR = 'David Mitchell'
+const DUMMY_QUOTE = {
+  text: DUMMY_QUOTE_TEXT,
+  author: DUMMY_QUOTE_AUTHOR
+}
+const DUMMY_NESTED_QUOTE = {
+  text: {
+    text: DUMMY_QUOTE_TEXT
+  },
+  author: DUMMY_QUOTE_AUTHOR
+}
+const DUMMY_QUOTE_RESULT = '“I understand now that boundaries between noise and sound are conventions. All boundaries are conventions, waiting to be transcended. One may transcend any convention if only one can first conceive of doing so.” -David Mitchell'
 
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
@@ -55,7 +67,21 @@ describe('qotd', () => {
     require('scripts/qotd').requestHandler()
       .then(
         (result) => {
-          expect(result).to.equal(DUMMY_QUOTE)
+          expect(result).to.equal(DUMMY_QUOTE_RESULT)
+          done()
+        },
+        (err) => {
+          done(err)
+        }
+      )
+  })
+
+  it('should support nested text objects', (done) => {
+    wikiMock.setMockResponse(DUMMY_NESTED_QUOTE)
+    require('scripts/qotd').requestHandler()
+      .then(
+        (result) => {
+          expect(result).to.equal(DUMMY_QUOTE_RESULT)
           done()
         },
         (err) => {

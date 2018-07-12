@@ -14,5 +14,5 @@ function returnMockResponse() {
 
 module.exports = {
   setMockResponse: setMockResponse,
-  QOTD: returnMockResponse
+  getQOTD: returnMockResponse
 }
