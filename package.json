@@ -16,6 +16,7 @@
     "cson": "^3.0.2",
     "filesize": "^3.3.0",
     "js-yaml": "^3.6.1",
+    "lambda-express": "^0.1.5",
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
     "request": "^2.76.0",

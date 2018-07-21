@@ -918,6 +918,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+lambda-express@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/lambda-express/-/lambda-express-0.1.5.tgz#1e84b363c9558de54bd8db32145b4c8c0e664ad9"
+
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
