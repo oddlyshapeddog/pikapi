@@ -1,0 +1,51 @@
+{
+  "httpMethod": "GET",
+  "resource": "/customapi/tracery",
+  "path": "/customapi/tracery",
+  "pathParameters": null,
+  "body": null,
+  "isBase64Encoded": false,
+  "queryStringParameters": {
+    "origin": "wtd",
+    "key": "5987102935871025981723"
+  },
+  "headers": {
+    "Host": "oddly.shaped.dog",
+    "Nightbot-Channel": "name=draws_with_kitties&displayName=draws_with_kitties&provider=twitch&providerId=92082397",
+    "Nightbot-Response-Url": "https://api.nightbot.tv/1/channel/send/TVRVeE56ZzRNVGc0TkRRM09DOTBkMmwwWTJndk5UWTNPVEV5WldRd01qVXlOREF4TlRNM01URmlNMk13TDJGM2N3OjA2NmYxOTc2ZTA5ZDdjYTZhNjYxNGIzMzFhOWQ3YTMzNDYyNWY1M2ZiYWQ3NGZkYWUxOWNiYTRjYjE3NjA2NGY",
+    "Nightbot-User": "name=notdaisuke&displayName=NotDaisuke&provider=twitch&providerId=54099899&userLevel=moderator",
+    "User-Agent": "Nightbot-URL-Fetcher/0.0.3",
+    "X-Amzn-Trace-Id": "Root=1-5a790a1c-6b7381dd26f6200a44013292",
+    "X-Forwarded-For": "127.0.0.1",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https",
+    "X-Amz-Cf-Id": "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA=="
+  },
+  "requestContext": {
+    "httpMethod": "GET",
+    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+    "requestTimeEpoch": 1517881884815,
+    "stage": "prod",
+    "apiId": "1234567890",
+    "path": "/customapi/tracery",
+    "resourcePath": "/customapi/tracery",
+    "resourceId": "123456",
+    "accountId": "123456789012",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "149.56.175.29",
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "Nightbot-URL-Fetcher/0.0.3",
+      "user": null
+    }
+  },
+  "stageVariables": {
+    "NODE_ENV": "production"
+  }
+}

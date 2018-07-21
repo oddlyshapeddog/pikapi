@@ -1,8 +1,14 @@
 language: node_js
 node_js:
 - '6'
-- '8'
-script: npm run lint && npm run test
+before_install:
+  - yarn
+cache:
+  directories:
+    - "node_modules"
+script:
+  - npm run lint
+  - npm run test
 deploy:
 - provider: lambda
   function_name: oddly-shaped-dog-preprod
