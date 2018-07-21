@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint *.js \"lib/**/*.js\"",
     "test": "mocha tests/**/*.spec.js",
-    "start": "LOG_LEVEL=debug npm run lint && node ./index.js"
+    "start": "LOG_LEVEL=debug npm run lint && node ./index.js",
+    "deploy": "sls deploy"
   },
   "author": "Julio Sepia",
   "license": "MIT",
@@ -14,11 +15,14 @@
     "app-module-path": "^2.1.0",
     "chai": "^3.5.0",
     "cson": "^3.0.2",
+    "express": "^4.16.3",
     "filesize": "^3.3.0",
     "js-yaml": "^3.6.1",
+    "lambda-express": "^0.1.5",
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
     "request": "^2.76.0",
+    "serverless-http": "^1.6.0",
     "tracery-grammar": "^2.7.2",
     "wikiquotesjs": "^0.6.6",
     "winston": "^2.2.0"

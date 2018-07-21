@@ -1,0 +1,40 @@
+service: oddly-shaped-dog
+
+custom:
+  defaultStage: preprod
+  currentStage: ${opt:stage, self:custom.defaultStage}
+  documentsTableName: 'OddlyShapedDog-documents-${self:custom.currentStage}'
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: ${self:custom.currentStage}
+  region: us-east-1
+  role: arn:aws:iam::766510574476:role/oddly_shaped_dog_execution
+environment:
+  DOCUMENTS_TABLE: ${self:custom.tableName}
+
+functions:
+  app:
+    handler: index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+resources:
+  Resources:
+    UsersDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: DocumentId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: DocumentId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 2
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.documentsTableName}
