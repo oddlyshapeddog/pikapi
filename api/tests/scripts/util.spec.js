@@ -3,7 +3,7 @@
 const expect = require('chai').expect
 const mockery = require('mockery')
 const appRootPath = require('app-root-path').path
-require('app-module-path').addPath(appRootPath + '/lib')
+require('app-module-path').addPath(appRootPath + '/api')
 
 // mocks
 const winstonMock = require('../mocks/winston-mock')
@@ -12,7 +12,7 @@ const commonAllowedDependencies = require('../test-utils/common-allowed-dependen
 
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
-  'scripts/debug'
+  'lib/scripts/debug'
 ])
 
 // test data
@@ -29,7 +29,7 @@ beforeEach(() => {
 describe('debug', () => {
 
   it('should return a promise', () => {
-    const requestHandler = require('scripts/debug')
+    const requestHandler = require('lib/scripts/debug')
       .requestHandler()
       .catch(() => {})
     expect(requestHandler).to.have.property('then')
@@ -38,7 +38,7 @@ describe('debug', () => {
 
   it('should return the uptime', (done) => {
     remoteDocumentLoaderMock.setMockResponse(DUMMY_LINE)
-    require('scripts/debug').requestHandler().then(
+    require('lib/scripts/debug').requestHandler().then(
       (result) => {
         expect(result).to.match(UPTIME_REGEX)
         done()

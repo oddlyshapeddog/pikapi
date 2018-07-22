@@ -1,4 +1,4 @@
-function noop(msg) {
+function noop() {
 }
 
 module.exports = {

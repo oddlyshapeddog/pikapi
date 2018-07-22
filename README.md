@@ -17,6 +17,13 @@ Each module in `scripts/` adds a request handler and maps it to an endpoint. Mod
 
 API responses are always plain text and always return a 200 status code (as per the Nightbot spec).
 
+## Setup
+
+```
+touch .env
+echo "LOG_LEVEL=debug" >> .env
+```
+
 ## APIs
 
 ### Amazon URL builder

@@ -3,8 +3,8 @@
 const expect = require('chai').expect
 const mockery = require('mockery')
 const appRootPath = require('app-root-path').path
-require('app-module-path').addPath(appRootPath + '/lib')
-const ERRORS = require('constants/errors')
+require('app-module-path').addPath(appRootPath + '/api')
+const ERRORS = require('lib/constants/errors')
 
 // mocks & utils
 const winstonMock = require('../mocks/winston-mock')
@@ -28,7 +28,7 @@ const DUMMY_QUOTE_RESULT = '“I understand now that boundaries between noise an
 
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
-  'scripts/qotd'
+  'lib/scripts/qotd'
 ])
 
 beforeEach(() => {
@@ -41,7 +41,7 @@ beforeEach(() => {
 describe('qotd', () => {
 
   it('should return a promise', () => {
-    const requestHandler = require('scripts/qotd')
+    const requestHandler = require('lib/scripts/qotd')
       .requestHandler()
       .catch(() => {})
     expect(requestHandler).to.have.property('then')
@@ -50,7 +50,7 @@ describe('qotd', () => {
 
   it('should throw an error if the response is empty', (done) => {
     wikiMock.setMockResponse('')
-    require('scripts/qotd').requestHandler()
+    require('lib/scripts/qotd').requestHandler()
       .then(
         () => {
           done(new Error())
@@ -64,7 +64,7 @@ describe('qotd', () => {
 
   it('should return a quote from wikiquotesjs', (done) => {
     wikiMock.setMockResponse(DUMMY_QUOTE)
-    require('scripts/qotd').requestHandler()
+    require('lib/scripts/qotd').requestHandler()
       .then(
         (result) => {
           expect(result).to.equal(DUMMY_QUOTE_RESULT)
@@ -78,7 +78,7 @@ describe('qotd', () => {
 
   it('should support nested text objects', (done) => {
     wikiMock.setMockResponse(DUMMY_NESTED_QUOTE)
-    require('scripts/qotd').requestHandler()
+    require('lib/scripts/qotd').requestHandler()
       .then(
         (result) => {
           expect(result).to.equal(DUMMY_QUOTE_RESULT)
