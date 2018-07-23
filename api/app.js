@@ -3,6 +3,7 @@ const cons = require('consolidate')
 const app = express()
 
 app.engine('jsx', cons.react)
+app.engine('eco', cons.eco)
 
 app.get('/api', (req, res) => {
   res.set('Content-Type', 'application/json')

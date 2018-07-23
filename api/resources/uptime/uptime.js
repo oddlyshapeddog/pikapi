@@ -6,20 +6,20 @@ router.get('/', function (req, res) {
   const uptime = getUptime()
   const data = { uptime: uptime }
   res.format({
-    text: function(){
+    'text/plain': function(){
       res.send(`Uptime: ${Math.floor(data.uptime / 1000)}s`)
     },
 
-    html: function(){
-      res.render('./UptimeView', data)
+    'text/html': function(){
+      res.render(`${__dirname}/uptime-view.eco`, data)
     },
 
-    json: function(){
-      res.send(data)
+    'application/json': function(){
+      res.json(data)
     },
 
     'default': function() {
-      res.status(406).send('Not Acceptable')
+      res.send(`Uptime: ${Math.floor(data.uptime / 1000)}s`)
     }
   })
 })
