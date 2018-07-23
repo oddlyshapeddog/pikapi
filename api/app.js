@@ -1,5 +1,8 @@
 const express = require('express')
+const cons = require('consolidate')
 const app = express()
+
+app.engine('jsx', cons.react)
 
 app.get('/api', (req, res) => {
   res.set('Content-Type', 'application/json')

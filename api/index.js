@@ -15,6 +15,6 @@ else {
   const port = process.env.PORT || 3000
   app.listen(
     port,
-    () => logger.debug(`Listening on port ${port}!`)
+    () => logger.debug('STARTED_LISTENING', { port })
   )
 }

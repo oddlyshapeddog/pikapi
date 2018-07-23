@@ -1,4 +1,5 @@
 const format = require('logform').format
+const MESSAGE = require('triple-beam').MESSAGE
 
 function formatKeyValuePair (key, value) {
   return `"${key}":${JSON.stringify(value)}`
@@ -31,5 +32,7 @@ module.exports = format((info, opts) => {
       }
     )
 
-  return `{${keyValuePairs.join()}}`
+  info[MESSAGE] = `{${keyValuePairs.join()}}`
+
+  return info
 })

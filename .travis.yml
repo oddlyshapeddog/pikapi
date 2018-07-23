@@ -5,8 +5,8 @@ cache:
   directories:
     - "node_modules"
 script:
-  - npm run lint
-  - npm run test
+  - npm run api:lint
+  - npm run api:test
 deploy:
 - provider: lambda
   function_name: oddly-shaped-dog-preprod

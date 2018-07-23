@@ -1,5 +1,7 @@
 const winston = require('winston')
 const uuidv4 = require('uuid/v4')
+const addMetadata = require('./logform-add-metadata')
+const jsonPrioritizeFields = require('./logform-json-prioritize-fields')
 
 const EXECUTION_ID = uuidv4()
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info'
@@ -30,10 +32,10 @@ if (
 }
 
 const format = winston.format.combine(
-  winston.format.colorize(),
-  winston.format.label({ executionId: EXECUTION_ID }),
+  winston.format.metadata({ key: 'data', executionId: EXECUTION_ID }),
+  addMetadata({ executionId: EXECUTION_ID }),
   winston.format.timestamp(),
-  winston.format.jsonPrioritizeFields(['timestamp', 'level', 'message'])
+  jsonPrioritizeFields({ prioritize: ['timestamp', 'level', 'message'] })
 )
 
 const logger = winston.createLogger({
@@ -45,7 +47,7 @@ const logger = winston.createLogger({
 logger.info(
   'LOGGER_INITIALIZED',
   {
-    level: LOG_LEVEL,
+    logLevel: LOG_LEVEL,
     remoteEndpoint: remoteEndpoint
   }
 )
