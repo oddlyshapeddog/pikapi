@@ -14,7 +14,7 @@ const appRootPath = require('app-root-path').path
 require('app-module-path').addPath(appRootPath + '/api')
 
 // mocks & utils
-const commonAllowedDependencies = require('../test-utils/common-allowed-dependencies')
+const commonAllowedDependencies = require(`tests/test-utils/common-allowed-dependencies`)
 let logformMock = { format: function() {} }
 let tripleBeamMock = require('tests/mocks/triple-beam-mock')
 const MESSAGE = tripleBeamMock.MESSAGE
@@ -34,7 +34,7 @@ const EVENT = {
 
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
-  'lib/util/logform-json-prioritize-fields'
+  'util/logform-json-prioritize-fields'
 ])
 
 beforeEach(() => {
@@ -55,21 +55,21 @@ beforeEach(() => {
 describe('logformJsonPrioritizeFields', () => {
 
   it('should pass a function to logform.format() and export a format', () => {
-    require('lib/util/logform-json-prioritize-fields')
+    require('util/logform-json-prioritize-fields')
     
     expect(logformMock.format).to.have.been.called
     expect(jsonPrioritizeFieldsFn).to.be.a('function')
   })
 
   it('should behave like JSON.stringify by default', () => {
-    require('lib/util/logform-json-prioritize-fields')
+    require('util/logform-json-prioritize-fields')
     const result = jsonPrioritizeFieldsFn(event)[MESSAGE]
     const expectedResult = JSON.stringify(EVENT)
     expect(result).to.equal(expectedResult)
   })
 
   it('should prioritize selected fields', () => {
-    require('lib/util/logform-json-prioritize-fields')
+    require('util/logform-json-prioritize-fields')
     const result = jsonPrioritizeFieldsFn(event, {
       prioritize: ['timestamp', 'level', 'message']
     })[MESSAGE]

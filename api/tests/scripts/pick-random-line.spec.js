@@ -4,7 +4,7 @@ const expect = require('chai').expect
 const mockery = require('mockery')
 const appRootPath = require('app-root-path').path
 require('app-module-path').addPath(appRootPath + '/api')
-const ERRORS = require('lib/constants/errors')
+const ERRORS = require('constants/errors')
 
 // mocks & utils
 const winstonMock = require('../mocks/winston-mock')
@@ -13,7 +13,7 @@ const commonAllowedDependencies = require('../test-utils/common-allowed-dependen
 
 // non-mocks
 const allowedDependencies = commonAllowedDependencies.concat([
-  'lib/scripts/pick-random-line',
+  'scripts/pick-random-line',
   '../util/remote-document-loader'
 ])
 
@@ -31,7 +31,7 @@ beforeEach(() => {
 describe('pick-random-line', () => {
 
   it('should return a promise', () => {
-    const requestHandler = require('lib/scripts/pick-random-line')
+    const requestHandler = require('scripts/pick-random-line')
       .requestHandler()
       .catch(() => {})
     expect(requestHandler).to.have.property('then')
@@ -40,7 +40,7 @@ describe('pick-random-line', () => {
 
   it('should throw an error if the document is empty', (done) => {
     remoteDocumentLoaderMock.setMockResponse('')
-    require('lib/scripts/pick-random-line').requestHandler({
+    require('scripts/pick-random-line').requestHandler({
       line: null,
       url: DUMMY_URL
     }).then(
@@ -57,7 +57,7 @@ describe('pick-random-line', () => {
 
   it('should pick the only line when available', (done) => {
     remoteDocumentLoaderMock.setMockResponse(DUMMY_LINE)
-    require('lib/scripts/pick-random-line').requestHandler({
+    require('scripts/pick-random-line').requestHandler({
       line: null,
       url: DUMMY_URL
     }).then(

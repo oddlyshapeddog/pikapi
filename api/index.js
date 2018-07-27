@@ -2,19 +2,33 @@ require('dotenv').config()
 
 const lambdaExpress = require('lambda-express')
 const isLambda      = require('is-lambda')
-const logger        = require('./lib/util/logger')
+const logger        = require('./util/logger')
+const db            = require('./db/index')
 const app           = require('./app')
 
-logger.debug('ENVIRONMENT_DETECTED', { isLambda })
-if (isLambda) {
-  exports.handler = lambdaExpress.appHandler(function(event, context) { // eslint-disable-line no-unused-vars
-    return app
-  })
-}
-else {
-  const port = process.env.PORT || 3000
-  app.listen(
-    port,
-    () => logger.debug('STARTED_LISTENING', { port })
+function init() {
+  logger.silly('INIT')
+  db.connect().then(
+    () => {
+      logger.debug('INIT_ENVIRONMENT_DETECTED', { isLambda })
+      if (isLambda) {
+        exports.handler = lambdaExpress.appHandler(function(event, context) { // eslint-disable-line no-unused-vars
+          return app
+        })
+      }
+      else {
+        const port = process.env.PORT || 3000
+        app.listen(
+          port,
+          () => logger.debug('INIT_STARTED_LISTENING', { port })
+        )
+      }
+    },
+    error => {
+      logger.error('INIT_ERROR', {error})
+      throw error
+    }
   )
 }
+
+init()

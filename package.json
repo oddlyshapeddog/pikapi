@@ -5,8 +5,7 @@
   "main": "api.js",
   "scripts": {
     "api:lint": "eslint \"./api/**/*.js\"",
-    "api:test": "mocha api/tests/**/*.spec.js",
-    "api:test-resources": "mocha api/resources/**/*.spec.js",
+    "api:test": "LOG_LEVEL=silly mocha api/**/*.spec.js",
     "api:start": "node ./api/index.js"
   },
   "author": "Julio Sepia",
@@ -17,6 +16,7 @@
     "consolidate": "^0.15.1",
     "cson": "^3.0.2",
     "dotenv": "^6.0.0",
+    "dynamoose": "^0.8.7",
     "eco": "^1.1.0-rc-3",
     "express": "^4.16.3",
     "filesize": "^3.3.0",

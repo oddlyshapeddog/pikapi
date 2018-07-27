@@ -19,9 +19,29 @@ API responses are always plain text and always return a 200 status code (as per 
 
 ## Setup
 
-```
+* Using a local instance of dynamodb requires [this docker image](https://hub.docker.com/r/dwmkerr/dynamodb/).
+
+```sh
+# set up a local docker
+docker run -p 8000:18000 dwmkerr/dynamodb
+open http://localhost:18000/shell &
+
+# set up env vars
 touch .env
 echo "LOG_LEVEL=debug" >> .env
+echo "DYNAMODB_LOCAL=localhost:18000" >> .env
+```
+
+### I want more logs
+
+```sh
+echo "AWS_DEBUG=true" >> .env
+```
+
+### I WANT ALL THE LOGS
+
+```sh
+echo "DEBUG=*" >> .env
 ```
 
 ## APIs

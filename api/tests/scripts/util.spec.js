@@ -29,7 +29,7 @@ beforeEach(() => {
 describe('debug', () => {
 
   it('should return a promise', () => {
-    const requestHandler = require('lib/scripts/debug')
+    const requestHandler = require('scripts/debug')
       .requestHandler()
       .catch(() => {})
     expect(requestHandler).to.have.property('then')
@@ -38,7 +38,7 @@ describe('debug', () => {
 
   it('should return the uptime', (done) => {
     remoteDocumentLoaderMock.setMockResponse(DUMMY_LINE)
-    require('lib/scripts/debug').requestHandler().then(
+    require('scripts/debug').requestHandler().then(
       (result) => {
         expect(result).to.match(UPTIME_REGEX)
         done()
