@@ -2,7 +2,7 @@
   "name": "pikapi",
   "version": "2.0.0",
   "description": "Pluggable API framework for Nightbot APIs",
-  "main": "api.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint *.js \"lib/**/*.js\"",
     "test": "mocha tests/**/*.spec.js",

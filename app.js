@@ -64,7 +64,12 @@ function handleEvent(route, event, handler, callback) {
 function buildResponse(statusCode, body) {
   return {
     statusCode: statusCode,
-    headers: { 'Content-Type': 'text/plain' },
+    headers: {
+      'Content-Type': 'text/plain',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET',
+      'Access-Control-Allow-Credentials': true,
+    },
     body: body
   }
 }
