@@ -1,33 +1,33 @@
 language: node_js
 node_js:
-  - "6"
+  - "10"
 script: npm run lint && npm run test
 deploy:
   - provider: lambda
     function_name: ods-build-amazon-url
     region: us-east-1
     role: arn:aws:iam::473651168974:role/oddly_shaped_dog_execution
-    runtime: nodejs6.10
+    runtime: nodejs10.x
     handler_name: build-amazon-url
     timeout: 10
   - provider: lambda
     function_name: ods-list
     region: us-east-1
     role: arn:aws:iam::473651168974:role/oddly_shaped_dog_execution
-    runtime: nodejs6.10
+    runtime: nodejs10.x
     handler_name: list
     timeout: 15
   - provider: lambda
     function_name: ods-pick-random-line
     region: us-east-1
     role: arn:aws:iam::473651168974:role/oddly_shaped_dog_execution
-    runtime: nodejs6.10
+    runtime: nodejs10.x
     handler_name: pick-random-line
     timeout: 15
   - provider: lambda
     function_name: ods-tracery
     region: us-east-1
     role: arn:aws:iam::473651168974:role/oddly_shaped_dog_execution
-    runtime: nodejs6.10
+    runtime: nodejs10.x
     handler_name: tracery
     timeout: 15
